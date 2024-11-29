@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<people>
+    <person>
+        <name>John Doe</name>
+        <age>30</age>
+        <interests>
+            <interest>Reading</interest>
+            <interest>Traveling</interest>
+            <interest>Cooking</interest>
+        </interests>
+        <favoriteMovies>
+            <movie>Inception</movie>
+            <movie>The Matrix</movie>
+        </favoriteMovies>
+        <favoriteMusic>
+            <genre>Rock</genre>
+            <genre>Jazz</genre>
+        </favoriteMusic>
+        <favoriteColor>Blue</favoriteColor>
+    </person>
+    <person>
+        <name>Jane Smith</name>
+        <age>28</age>
+        <interests>
+            <interest>Cycling</interest>
+            <interest>Photography</interest>
+            <interest>Gardening</interest>
+        </interests>
+        <favoriteMovies>
+            <movie>Titanic</movie>
+            <movie>Pulp Fiction</movie>
+        </favoriteMovies>
+        <favoriteMusic>
+            <genre>Pop</genre>
+            <genre>Classical</genre>
+        </favoriteMusic>
+        <favoriteColor>Green</favoriteColor>
+    </person>
+    <person>
+        <name>Alice Johnson</name>
+        <age>25</age>
+        <interests>
+            <interest>Drawing</interest>
+            <interest>Hiking</interest>
+            <interest>Video Games</interest>
+        </interests>
+        <favoriteMovies>
+            <movie>The Shawshank Redemption</movie>
+            <movie>Avatar</movie>
+        </favoriteMovies>
+        <favoriteMusic>
+            <genre>Hip Hop</genre>
+            <genre>Electronic</genre>
+        </favoriteMusic>
+        <favoriteColor>Red</favoriteColor>
+    </person>
+    <person>
+        <name>Bob Brown</name>
+        <age>32</age>
+        <interests>
+            <interest>Fishing</interest>
+            <interest>Writing</interest>
+            <interest>Comics</interest>
+        </interests>
+        <favoriteMovies>
+            <movie>Gladiator</movie>
+            <movie>Jurassic Park</movie>
+        </favoriteMovies>
+        <favoriteMusic>
+            <genre>Country</genre>
+            <genre>Reggae</genre>
+        </favoriteMusic>
+        <favoriteColor>Purple</favoriteColor>
+    </person>
+    <person>
+        <name>Charlie Garcia</name>
+        <age>29</age>
+        <interests>
+            <interest>Basketball</interest>
+            <interest>Cooking</interest>
+            <interest>Traveling</interest>
+        </interests>
+        <favoriteMovies>
+            <movie>Forrest Gump</movie>
+            <movie>Fight Club</movie>
+        </favoriteMovies>
+        <favoriteMusic>
+            <genre>Indie</genre>
+            <genre>Rock</genre>
+        </favoriteMusic>
+        <favoriteColor>Yellow</favoriteColor>
+    </person>
+</people>

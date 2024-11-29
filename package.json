@@ -11,5 +11,9 @@
     "schema-parser"
   ],
   "author": "Ben Medeiros",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "xml2js": "^0.6.2"
+  }
 }
