@@ -14,15 +14,20 @@ function promptUser() {
         + '1 : ls: list files for import\n';
 
     rl.question(menu, (answer) => {
-        if (answer === '0' || answer.toLowerCase() === 'quit') {
-            console.log('Exiting application...');
-            rl.close();
-        } else if (answer === '1' || answer.toLowerCase() === 'ls') {
-            promptUserToSelectFile().then();
-        } else {
-            // If not quitting, call promptUser again
-            console.log('You typed:', answer);
-            promptUser();
+        switch (answer.toLowerCase()) {
+            case '0':
+            case 'quit':
+                console.log('Exiting application...');
+                rl.close();
+                break;
+            case '1':
+            case 'ls':
+                promptUserToSelectFile();
+                break;
+            default:
+                console.log('You typed:', answer);
+                promptUser();
+                break;
         }
     });
 }
@@ -37,19 +42,18 @@ async function promptUserToSelectFile() {
             rl.close();
             
         } else if (files[answer] === undefined) {
-            rl.write('Invalid file selection');
+            console.log('Invalid file selection');
             promptUserToSelectFile();
 
         } else {
-            rl.write('You selected file: ' + files[Number(answer)] + '\n');
+            console.log('You selected file: ' + files[Number(answer)]);
 
             importFile(`./files/${files[answer]}`).then(result => {
-                rl.write(JSON.stringify(result, null, 2)); // Indent with 2 spaces
-                rl.write('\n');
+                console.log(JSON.stringify(result, null, 2)); // Indent with 2 spaces
                 promptUser();
             });
         }
-    })
+    });
 }
 
 module.exports = { promptUser };
