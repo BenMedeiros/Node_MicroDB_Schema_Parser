@@ -1,0 +1,15 @@
+{
+  "name": "node_microdb_schema_parser",
+  "version": "1.0.0",
+  "description": "Import data from file, parse csv/json/tab/xml then map to schema.  Find schema matches, and apply data normalization and string encoding normalization to see what type of compression/performance changes it allows for.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [
+    "import",
+    "schema-parser"
+  ],
+  "author": "Ben Medeiros",
+  "license": "ISC"
+}
