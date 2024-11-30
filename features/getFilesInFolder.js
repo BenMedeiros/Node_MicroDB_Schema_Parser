@@ -18,7 +18,7 @@ function getFilesInFolder(folder) {
                 reject(new Error(`Unable to scan directory: ${error.message}`));
             } else {
                 // Filter out only the actual files
-                // const filePaths = files.map(file => path.join(folderPath, file));
+                files = files.filter(file => fs.statSync(path.join(folderPath, file)).isFile());
                 resolve(files);
             }
         });

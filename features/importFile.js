@@ -26,7 +26,7 @@ function importFile(filePath) {
                     break;
                 
                 case '.xml':
-                    xml2js.parseString(fileContent, (err, result) => {
+                    xml2js.parseString(fileContent, { explicitArray: false }, (err, result) => {
                         if (err) {
                             reject(new Error(`Failed to parse XML: ${err.message}`));
                         } else {

@@ -1,0 +1,94 @@
+{
+  "people": [
+    {
+      "name": "John Doe",
+      "age": 30,
+      "interests": [
+        "Reading",
+        "Traveling",
+        "Cooking"
+      ],
+      "favoriteMovies": [
+        "Inception",
+        "The Matrix"
+      ],
+      "favoriteMusic": [
+        "Rock",
+        "Jazz"
+      ],
+      "favoriteColor": "Blue"
+    },
+    {
+      "name": "Jane Smith",
+      "age": 28,
+      "interests": [
+        "Cycling",
+        "Photography",
+        "Gardening"
+      ],
+      "favoriteMovies": [
+        "Titanic",
+        "Pulp Fiction"
+      ],
+      "favoriteMusic": [
+        "Pop",
+        "Classical"
+      ],
+      "favoriteColor": "Green"
+    },
+    {
+      "name": "Alice Johnson",
+      "age": 25,
+      "interests": [
+        "Drawing",
+        "Hiking",
+        "Video Games"
+      ],
+      "favoriteMovies": [
+        "The Shawshank Redemption",
+        "Avatar"
+      ],
+      "favoriteMusic": [
+        "Hip Hop",
+        "Electronic"
+      ],
+      "favoriteColor": "Red"
+    },
+    {
+      "name": "Bob Brown",
+      "age": 32,
+      "interests": [
+        "Fishing",
+        "Writing",
+        "Comics"
+      ],
+      "favoriteMovies": [
+        "Gladiator",
+        "Jurassic Park"
+      ],
+      "favoriteMusic": [
+        "Country",
+        "Reggae"
+      ],
+      "favoriteColor": "Purple"
+    },
+    {
+      "name": "Charlie Garcia",
+      "age": 29,
+      "interests": [
+        "Basketball",
+        "Cooking",
+        "Traveling"
+      ],
+      "favoriteMovies": [
+        "Forrest Gump",
+        "Fight Club"
+      ],
+      "favoriteMusic": [
+        "Indie",
+        "Rock"
+      ],
+      "favoriteColor": "Yellow"
+    }
+  ]
+}

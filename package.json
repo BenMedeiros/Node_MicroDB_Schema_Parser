@@ -4,7 +4,7 @@
   "description": "Import data from file, parse csv/json/tab/xml then map to schema.  Find schema matches, and apply data normalization and string encoding normalization to see what type of compression/performance changes it allows for.",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "test": "index.js"
   },
   "keywords": [
     "import",

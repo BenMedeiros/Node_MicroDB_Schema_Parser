@@ -1,0 +1,14 @@
+{
+    "people": [
+        {
+            "name": "John Doe",
+            "age": 30,
+            "favoriteColor": "Blue",
+            "favoriteMovies": [
+                "The Matrix",
+                "The Godfather",
+                75
+            ]
+        }
+    ]
+}
