@@ -8,7 +8,12 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-// Function to prompt user for input
+/**
+ * Function to prompt user for input and handle the response.
+ * Displays a menu with options to quit or list files for import.
+ * 
+ * @returns {void}
+ */
 function promptUser() {
     const menu = '\n0 : quit: exit application\n'
         + '1 : ls: list files for import\n';
@@ -32,6 +37,12 @@ function promptUser() {
     });
 }
 
+/**
+ * Function to prompt user to select a file from the list of files in the './files' directory.
+ * Handles the user's file selection and imports the selected file.
+ * 
+ * @returns {Promise<void>}
+ */
 async function promptUserToSelectFile() {
     const files = await getFilesInFolder('./files');
     const result = files.map((file, index) => `${index}: ${file}`).join('\n');
