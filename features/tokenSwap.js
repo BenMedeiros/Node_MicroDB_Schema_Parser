@@ -38,7 +38,7 @@ function tokenSwap(csv) {
         }
     });
 
-    console.log('Largest token:', largestTokenKey, largestTokenValue);
+    console.log('Largest token:', largestTokenKey, largestTokenValue, largestTokenKey.length*largestTokenValue);
 
     // replace all instances of largest token with 'a'
     csvArray.forEach((element, index) => {
@@ -64,3 +64,4 @@ function tokenSwap(csv) {
 
 const csv = '123,1234,123123,1234,12341234';
 tokenSwap(csv);
+
