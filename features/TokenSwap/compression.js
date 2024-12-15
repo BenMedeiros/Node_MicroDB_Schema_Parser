@@ -2,6 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 
+/**
+ * Reads all files in the specified folder, compresses them using gzip, deflate, and brotli,
+ * and returns an array of compression information for each file.
+ * 
+ * @param {string} dataFolder - The path to the folder containing the files to be compressed.
+ * @returns {Array} - An array of objects containing compression information for each file.
+ */
 function readFolderAndTestCompression(dataFolder) {
     const compressionInfo = [];
 
@@ -57,7 +64,6 @@ function readFolderAndTestCompression(dataFolder) {
 const dataFolder = path.join(__dirname, 'data');
 // readFolderAndTestCompression(dataFolder);
 
-
 const allComprssionTests = [];
 for (let i = 0; i < 10; i++) {
     console.log('i:', i);
@@ -66,6 +72,12 @@ for (let i = 0; i < 10; i++) {
     // console.dir(compressionInfo, { depth: null });
 }
 
+/**
+ * Calculates statistical information (min, max, median, sum, average, standard deviation) for an array of numbers.
+ * 
+ * @param {Array} array - The array of numbers to calculate statistics for.
+ * @returns {Object} - An object containing the calculated statistics.
+ */
 function getArrayStats(array){
     const stats = {
         min: Math.min(...array),
@@ -76,6 +88,8 @@ function getArrayStats(array){
     stats.avg = stats.sum / array.length;
     stats.stdDev = Math.sqrt(array.reduce((a, b) => a + Math.pow(b - stats.avg, 2), 0) / array.length);
     stats.stdDev = Math.round(stats.stdDev * 10000) / 10000; // round to 4 decimal places
+    stats.avg = Math.round(stats.avg * 10000) / 10000; // round to 4 decimal places
+    stats.sum = Math.round(stats.sum * 10000) / 10000; // round to 4 decimal places
 
     // if all values are the same, return that value
     if(stats.min === stats.max){
@@ -119,27 +133,3 @@ testResults.forEach((testResult) => {
 
 console.log('testResults:');
 console.dir(testResults, { depth: null });
-
-console.table(testResults.map(result => ({
-    file: result.file,
-    size: result.size,
-    // gzipSize: result.gzip.size,
-    // gzipTime: result.gzip.time,
-    // gzipTimeMin: result.gzip.time.min,
-    // gzipTimeMax: result.gzip.time.max,
-    // gzipTimeMedian: result.gzip.time.median,
-    // gzipTimeStdDev: result.gzip.time.stdDev,
-    // deflateSize: result.deflate.size,
-    // deflateTime: result.deflate.time,
-    defTMin: result.deflate.time.min,
-    defTMax: result.deflate.time.max,
-    defTMedian: result.deflate.time.median,
-    defTStdDev: result.deflate.time.stdDev,
-    brotliSize: result.brotli.size,
-    // brotliTime: result.brotli.time,
-    brliTMin: result.brotli.time.min,
-    brliMax: result.brotli.time.max,
-    brliTMedian: result.brotli.time.median,
-    brliTStdDev: result.brotli.time.stdDev
-})));
-
