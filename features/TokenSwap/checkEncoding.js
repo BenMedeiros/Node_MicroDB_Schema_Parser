@@ -11,9 +11,7 @@ function isValidUtf8(str) {
 }
 
 // Example usage
-const testString = "This oding.";
-// const isUtf8 = isValidUtf8(testString);
-const invalidUtf8String = String.fromCharCode(4)+ String.fromCharCode(56834);;
+const invalidUtf8String = String.fromCharCode(55357)+ String.fromCharCode(56834);;
 console.log(isValidUtf8(invalidUtf8String));
 
 const emoji = "😂";
