@@ -68,39 +68,3 @@ const csv = fs.readFileSync(csvFilePath, 'utf8');
 // tokenSwap(csv.replaceAll('3.10444330774908', '001').replaceAll('1.55222165387454', '002'));
 // tokenSwap(csv);
 
-const encodings = ['utf8', 'utf16le', 'latin1', 'ascii', 'base64', 'hex', 'binary', 'ucs2'];
-
-encodings.forEach(encoding => {
-    console.log();
-    console.log(encoding);
-    
-    const outputFilePath = path.join(__dirname, `output/output.${encoding}.csv`);
-
-    try{
-        fs.writeFileSync(outputFilePath, csv, { encoding: encoding });
-        console.log(`File written with ${encoding} encoding to ${outputFilePath}`);
-    }catch (err){
-        console.error(err);
-    }
-});
-
-// Handle true binary encoding
-const binaryOutputFilePath = path.join(__dirname, 'output/output.binary');
-const binaryBuffer = Buffer.from(csv, 'utf8');
-try{
-    fs.writeFileSync(binaryOutputFilePath, binaryBuffer);
-    console.log(`File written with binary encoding to ${binaryOutputFilePath}`);
-}catch (err){
-    console.error(err);
-}
-
-console.log();
-const hexOutputFilePath = path.join(__dirname, 'output/output.hex.csv');
-const hexBuffer = Buffer.from(csv, 'utf8').toString('hex');
-console.log(hexBuffer);
-try {
-    fs.writeFileSync(hexOutputFilePath, hexBuffer, { encoding: 'binary' });
-    console.log(`File written with hex encoding to ${hexOutputFilePath}`);
-} catch (err) {
-    console.error(err);
-}
