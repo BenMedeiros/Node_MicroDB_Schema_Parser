@@ -2,6 +2,7 @@
  * Analyze full word hashing between each element in a CSV file.
  */
 
+const { hash } = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
@@ -25,11 +26,33 @@ function fullCsvTokenSwap(csvString) {
         });
     });
 
-    // console.log([...tokenMap.entries()].sort((a, b) => b[1] - a[1]));
-    const totalKeyLength = [...tokenMap.keys()].reduce((sum, key) => sum + key.length, 0);
-    console.log('Total sum of key lengths:', totalKeyLength);
+    const sortedTokens = [...tokenMap.entries()].sort((a, b) => b[1] - a[1]);
+    const totalKeyLength = sortedTokens.reduce((acc, [key, value]) => acc + key.length, 0);
+    const totalKeyCount = sortedTokens.length;
+    console.log('Total key length:', totalKeyLength);
+    tokenMap.clear();
 
-    return tokenMap;
+
+    const baseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+    function toBaseChars(num) {
+        if (num === 0) return baseChars[0];
+        let result = '';
+        while (num > 0) {
+            result = baseChars[num % baseChars.length] + result;
+            num = Math.floor(num / baseChars.length);
+        }
+        return result;
+    }
+
+    sortedTokens.forEach(([key, value], index) => {
+        tokenMap.set(key, {
+            hash: toBaseChars(index),
+            count: value
+        });
+    });
+
+    return { tokenMap, totalKeyCount };
 }
 
 function scanCsvTiming(csvString) {
@@ -51,17 +74,19 @@ function scanCsvReplaceTiming(csvString) {
     console.log(`scanCsvReplaceTimingxx: ${end[0]}s ${end[1] / 1000000}ms`);
 }
 
-function replaceCsvWithTokenMap(csvString, tokenMap) {
+function replaceCsvWithTokenMap(csvString, { tokenMap, totalKeyCount }) {
     const rows = csvString.split('\r\n');
     const result = rows.map(row => row.split(','));
 
     const start = process.hrtime();
     let index = 0;
 
+    // console.log('Token Map:', tokenMap);
+    console.log('Total count of keys:', totalKeyCount);
     result.forEach(row => {
         row.forEach((element, idx) => {
             if (tokenMap.has(element)) {
-                const replacement = Buffer.from(String.fromCharCode(65 + index % 58)) + Buffer.from(String.fromCharCode(65 + index / 58));
+                const replacement = tokenMap.get(element).hash;
                 index++;
                 row[idx] = replacement;
             }
@@ -74,23 +99,41 @@ function replaceCsvWithTokenMap(csvString, tokenMap) {
     return result.map(row => row.join(',')).join('\r\n');
 }
 
+function convertCsvToDataSet(csvString) {
+    const rows = csvString.split('\r\n');
+    return rows.map(row => row.split(','));
+}
+
 const csvFilePath = path.join(__dirname, 'data/003.csv');
+console.log('Reading CSV file:', csvFilePath);
 const csv = fs.readFileSync(csvFilePath, 'utf8');
 // console.log('CSV:', csv);
 console.log(csv.length);
 scanCsvTiming(csv);
 scanCsvReplaceTiming(csv);
 
+console.log();
+const { tokenMap, totalKeyCount } = fullCsvTokenSwap(csv);
 
-const tokenMap = fullCsvTokenSwap(csv);
-
-const replacedCsv = replaceCsvWithTokenMap(csv, tokenMap);
+const replacedCsv = replaceCsvWithTokenMap(csv, { tokenMap, totalKeyCount });
 // console.log('Replaced CSV:', replacedCsv);
 console.log('Length of replaced CSV:', replacedCsv.length);
 runWithTiming(scanCsvTiming, replacedCsv);
-scanCsvTiming(replacedCsv);
 runWithTiming(scanCsvReplaceTiming, replacedCsv);
-scanCsvReplaceTiming(replacedCsv);
 console.log();
 
 
+// speed comparisions against DB structure instead of strings
+console.log('Converting to dataset...');
+const originalDataSet = convertCsvToDataSet(csv);
+const replacedDataSet = convertCsvToDataSet(replacedCsv);
+// console.log('Original dataset:', originalDataSet);
+// console.log('Replaced dataset:', replacedDataSet);
+
+
+/* 
+Notes to Self
+The real compression ratio is replaced CSV length + total key length since that needs to be stored.
+If every hash uses the same length (ex 3 chars) then the comma can be assumed and not stored.
+A hash would need to exist for newline, but if the columns are consistent, then is a stored 1x.
+*/
