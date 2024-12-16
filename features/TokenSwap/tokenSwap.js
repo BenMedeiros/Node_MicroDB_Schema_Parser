@@ -66,5 +66,5 @@ const csvFilePath = path.join(__dirname, 'data/001.csv');
 // const csvFilePath = path.join(__dirname, '002.csv');
 const csv = fs.readFileSync(csvFilePath, 'utf8');
 // tokenSwap(csv.replaceAll('3.10444330774908', '001').replaceAll('1.55222165387454', '002'));
-// tokenSwap(csv);
+tokenSwap(csv);
 

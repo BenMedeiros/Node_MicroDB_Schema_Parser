@@ -17,6 +17,8 @@ function readFolderAndTestCompression(dataFolder) {
 
         for (const file of files) {
             const filePath = path.join(dataFolder, file);
+            const stats = fs.statSync(filePath);
+
             try {
                 let startTime = process.hrtime();
 
@@ -61,24 +63,13 @@ function readFolderAndTestCompression(dataFolder) {
     return compressionInfo;
 }
 
-const dataFolder = path.join(__dirname, 'data');
-// readFolderAndTestCompression(dataFolder);
-
-const allComprssionTests = [];
-for (let i = 0; i < 10; i++) {
-    console.log('i:', i);
-    const compressionInfo = readFolderAndTestCompression(dataFolder);
-    allComprssionTests.push(compressionInfo);
-    // console.dir(compressionInfo, { depth: null });
-}
-
 /**
  * Calculates statistical information (min, max, median, sum, average, standard deviation) for an array of numbers.
  * 
  * @param {Array} array - The array of numbers to calculate statistics for.
  * @returns {Object} - An object containing the calculated statistics.
  */
-function getArrayStats(array){
+function getArrayStats(array) {
     const stats = {
         min: Math.min(...array),
         max: Math.max(...array),
@@ -92,44 +83,62 @@ function getArrayStats(array){
     stats.sum = Math.round(stats.sum * 10000) / 10000; // round to 4 decimal places
 
     // if all values are the same, return that value
-    if(stats.min === stats.max){
+    if (stats.min === stats.max) {
         return stats.min;
     }
     return stats;
 }
 
-const testResults = [];
-for (const compressionInfo of allComprssionTests) {
-    for (i = 0; i < compressionInfo.length; i++) {
-        const fileCompressionInfo = compressionInfo[i];
-
-        if (!testResults[i]) {
-            testResults[i] = {
-                file: fileCompressionInfo.file,
-                size: fileCompressionInfo.size,
-                gzip: { size: [], time: [] },
-                deflate: { size: [], time: [] },
-                brotli: { size: [], time: [] }
-            };
-        }
-
-        testResults[i].gzip.size.push(fileCompressionInfo.gzip.size);
-        testResults[i].gzip.time.push(fileCompressionInfo.gzip.time);
-        testResults[i].deflate.size.push(fileCompressionInfo.deflate.size);
-        testResults[i].deflate.time.push(fileCompressionInfo.deflate.time);
-        testResults[i].brotli.size.push(fileCompressionInfo.brotli.size);
-        testResults[i].brotli.time.push(fileCompressionInfo.brotli.time);
+function bulkTesting(dataFolder, testIterations) {
+    const allComprssionTests = [];
+    for (let i = 0; i < testIterations; i++) {
+        console.log('i:', i);
+        const compressionInfo = readFolderAndTestCompression(dataFolder);
+        allComprssionTests.push(compressionInfo);
+        // console.dir(compressionInfo, { depth: null });
     }
+
+    const testResults = [];
+    for (const compressionInfo of allComprssionTests) {
+        for (i = 0; i < compressionInfo.length; i++) {
+            const fileCompressionInfo = compressionInfo[i];
+
+            if (!testResults[i]) {
+                testResults[i] = {
+                    file: fileCompressionInfo.file,
+                    size: fileCompressionInfo.size,
+                    gzip: { size: [], time: [] },
+                    deflate: { size: [], time: [] },
+                    brotli: { size: [], time: [] }
+                };
+            }
+
+            testResults[i].gzip.size.push(fileCompressionInfo.gzip.size);
+            testResults[i].gzip.time.push(fileCompressionInfo.gzip.time);
+            testResults[i].deflate.size.push(fileCompressionInfo.deflate.size);
+            testResults[i].deflate.time.push(fileCompressionInfo.deflate.time);
+            testResults[i].brotli.size.push(fileCompressionInfo.brotli.size);
+            testResults[i].brotli.time.push(fileCompressionInfo.brotli.time);
+        }
+    }
+
+    testResults.forEach((testResult) => {
+        testResult.gzip.size = getArrayStats(testResult.gzip.size);
+        testResult.gzip.time = getArrayStats(testResult.gzip.time);
+        testResult.deflate.size = getArrayStats(testResult.deflate.size);
+        testResult.deflate.time = getArrayStats(testResult.deflate.time);
+        testResult.brotli.size = getArrayStats(testResult.brotli.size);
+        testResult.brotli.time = getArrayStats(testResult.brotli.time);
+    });
+
+    console.log('testResults:');
+    console.dir(testResults, { depth: null });
 }
 
-testResults.forEach((testResult) => {
-    testResult.gzip.size = getArrayStats(testResult.gzip.size);
-    testResult.gzip.time = getArrayStats(testResult.gzip.time);
-    testResult.deflate.size = getArrayStats(testResult.deflate.size);
-    testResult.deflate.time = getArrayStats(testResult.deflate.time);
-    testResult.brotli.size = getArrayStats(testResult.brotli.size);
-    testResult.brotli.time = getArrayStats(testResult.brotli.time);
-});
+const dataFolder = path.join(__dirname, 'data');
 
-console.log('testResults:');
-console.dir(testResults, { depth: null });
+const compressionInfo = readFolderAndTestCompression(dataFolder);
+console.dir(compressionInfo, { depth: null });
+
+// bulkTesting(dataFolder, 10);
+
