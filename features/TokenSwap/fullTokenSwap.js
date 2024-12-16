@@ -5,6 +5,14 @@
 const fs = require('fs');
 const path = require('path');
 
+function runWithTiming(func, ...args) {
+    const start = process.hrtime();
+    const result = func(...args);
+    const end = process.hrtime(start);
+    console.log(`${func.name}: ${end[0]}s ${end[1] / 1000000}ms`);
+    return result;
+}
+
 function fullCsvTokenSwap(csvString) {
     const rows = csvString.split('\r\n');
     const result = rows.map(row => row.split(','));
@@ -30,7 +38,7 @@ function scanCsvTiming(csvString) {
         csvString[i];
     }
     const end = process.hrtime(start);
-    console.log(`scanCsvTiming: ${end[0]}s ${end[1] / 1000000}ms`);
+    console.log(`scanCsvTimingxx: ${end[0]}s ${end[1] / 1000000}ms`);
 }
 
 function scanCsvReplaceTiming(csvString) {
@@ -40,7 +48,7 @@ function scanCsvReplaceTiming(csvString) {
         csvStringCopy[i] = csvStringCopy[i];
     }
     const end = process.hrtime(start);
-    console.log(`scanCsvReplaceTiming: ${end[0]}s ${end[1] / 1000000}ms`);
+    console.log(`scanCsvReplaceTimingxx: ${end[0]}s ${end[1] / 1000000}ms`);
 }
 
 function replaceCsvWithTokenMap(csvString, tokenMap) {
@@ -79,6 +87,10 @@ const tokenMap = fullCsvTokenSwap(csv);
 const replacedCsv = replaceCsvWithTokenMap(csv, tokenMap);
 // console.log('Replaced CSV:', replacedCsv);
 console.log('Length of replaced CSV:', replacedCsv.length);
+runWithTiming(scanCsvTiming, replacedCsv);
 scanCsvTiming(replacedCsv);
+runWithTiming(scanCsvReplaceTiming, replacedCsv);
 scanCsvReplaceTiming(replacedCsv);
+console.log();
+
 
