@@ -34,9 +34,10 @@ function scanCsvTiming(csvString) {
 }
 
 function scanCsvReplaceTiming(csvString) {
+    const csvStringCopy = csvString.slice();
     const start = process.hrtime();
-    for (let i = 0; i < csvString.length; i++) {
-        csvString[i] = csvString[i];
+    for (let i = 0; i < csvStringCopy.length; i++) {
+        csvStringCopy[i] = csvStringCopy[i];
     }
     const end = process.hrtime(start);
     console.log(`scanCsvReplaceTiming: ${end[0]}s ${end[1] / 1000000}ms`);
@@ -67,6 +68,7 @@ function replaceCsvWithTokenMap(csvString, tokenMap) {
 
 const csvFilePath = path.join(__dirname, 'data/003.csv');
 const csv = fs.readFileSync(csvFilePath, 'utf8');
+// console.log('CSV:', csv);
 console.log(csv.length);
 scanCsvTiming(csv);
 scanCsvReplaceTiming(csv);
@@ -75,4 +77,8 @@ scanCsvReplaceTiming(csv);
 const tokenMap = fullCsvTokenSwap(csv);
 
 const replacedCsv = replaceCsvWithTokenMap(csv, tokenMap);
+// console.log('Replaced CSV:', replacedCsv);
 console.log('Length of replaced CSV:', replacedCsv.length);
+scanCsvTiming(replacedCsv);
+scanCsvReplaceTiming(replacedCsv);
+
