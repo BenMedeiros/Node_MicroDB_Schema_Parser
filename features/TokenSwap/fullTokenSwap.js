@@ -14,9 +14,9 @@ function runWithTiming(func, ...args) {
     return result;
 }
 
-function fullCsvTokenSwap(csvString) {
-    const rows = csvString.split('\r\n');
-    const result = rows.map(row => row.split(','));
+function fullCsvTokenSwap(csvString, encodingCharSet) {
+    const rows = csvString.split(rowEol);
+    const result = rows.map(row => row.split(colEol));
     // console.log(result);
     console.log('Rows:', result.length);
 
@@ -31,24 +31,22 @@ function fullCsvTokenSwap(csvString) {
     const totalKeyLength = sortedTokens.reduce((acc, [key, value]) => acc + key.length, 0);
     const totalKeyCount = sortedTokens.length;
     console.log('Total key length:', totalKeyLength);
+    console.log('Chars Needed:', Math.log(totalKeyCount) / Math.log(encodingCharSet.length));
     tokenMap.clear();
 
-
-    const baseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-
-    function toBaseChars(num) {
-        if (num === 0) return baseChars[0];
+    function toEncodingCharSet(num) {
+        if (num === 0) return encodingCharSet[0];
         let result = '';
         while (num > 0) {
-            result = baseChars[num % baseChars.length] + result;
-            num = Math.floor(num / baseChars.length);
+            result = encodingCharSet[num % encodingCharSet.length] + result;
+            num = Math.floor(num / encodingCharSet.length);
         }
         return result;
     }
 
     sortedTokens.forEach(([key, value], index) => {
         tokenMap.set(key, {
-            hash: toBaseChars(index),
+            hash: toEncodingCharSet(index),
             count: value
         });
     });
@@ -57,32 +55,26 @@ function fullCsvTokenSwap(csvString) {
 }
 
 function scanCsvTiming(csvString) {
-    const start = process.hrtime();
     for (let i = 0; i < csvString.length; i++) {
         csvString[i];
     }
-    const end = process.hrtime(start);
-    console.log(`scanCsvTimingxx: ${end[0]}s ${end[1] / 1000000}ms`);
 }
 
 function scanCsvReplaceTiming(csvString) {
     const csvStringCopy = csvString.slice();
-    const start = process.hrtime();
     for (let i = 0; i < csvStringCopy.length; i++) {
         // wanted some status updates for large files
-        if(i % 1000000 === 0) {
+        if (i % 1000000 === 0) {
             console.log('i:', i / 1000000);
         }
 
         csvStringCopy[i] = csvStringCopy[i];
     }
-    const end = process.hrtime(start);
-    console.log(`scanCsvReplaceTimingxx: ${end[0]}s ${end[1] / 1000000}ms`);
 }
 
 function replaceCsvWithTokenMap(csvString, { tokenMap, totalKeyCount }) {
-    const rows = csvString.split('\r\n');
-    const result = rows.map(row => row.split(','));
+    const rows = csvString.split(rowEol);
+    const result = rows.map(row => row.split(colEol));
 
     const start = process.hrtime();
     let index = 0;
@@ -102,39 +94,58 @@ function replaceCsvWithTokenMap(csvString, { tokenMap, totalKeyCount }) {
     const end = process.hrtime(start);
     console.log(`replaceCsvWithTokenMap: ${end[0]}s ${end[1] / 1000000}ms`);
 
-    return result.map(row => row.join(',')).join('\r\n');
+    return result.map(row => row.join(colEol)).join(rowEol);
 }
 
 function convertCsvToDataSet(csvString) {
-    const rows = csvString.split('\r\n');
-    return rows.map(row => row.split(','));
+    const rows = csvString.split(rowEol);
+    return rows.map(row => row.split(colEol));
 }
 
 const csvFilePath = path.join(__dirname, 'data/003.csv');
+const rowEol = ',';
+const colEol = ';';
+const fileLimitSize = 10000000;
+
+const encodingCharSets = [
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+    Array(256).fill(0).map((_, i) => String.fromCharCode(i)).join(''),
+]
+
 console.log('Reading CSV file:', csvFilePath);
-const csv = fs.readFileSync(csvFilePath, 'utf8');
+const csv = fs.readFileSync(csvFilePath, 'utf8').slice(0, fileLimitSize);
 // console.log('CSV:', csv);
-console.log(csv.length);
-scanCsvTiming(csv);
-scanCsvReplaceTiming(csv);
+console.log('Length of CSV:', csv.length);
+console.log();
+runWithTiming(scanCsvTiming, csv);
+runWithTiming(scanCsvReplaceTiming, csv);
+
+for (const encodingCharSet of encodingCharSets) {
+    console.log();
+    console.log('Encoding Char Set:', encodingCharSet);
+    const { tokenMap, totalKeyCount } = fullCsvTokenSwap(csv, encodingCharSet);
+    console.log();
+    const replacedCsv = replaceCsvWithTokenMap(csv, { tokenMap, totalKeyCount });
+    // console.log('Replaced CSV:', replacedCsv);
+    console.log('Length of replaced CSV:', replacedCsv.length);
+    console.log();
+    runWithTiming(scanCsvTiming, replacedCsv);
+    runWithTiming(scanCsvReplaceTiming, replacedCsv);
+}
 
 console.log();
-const { tokenMap, totalKeyCount } = fullCsvTokenSwap(csv);
-
-const replacedCsv = replaceCsvWithTokenMap(csv, { tokenMap, totalKeyCount });
-// console.log('Replaced CSV:', replacedCsv);
-console.log('Length of replaced CSV:', replacedCsv.length);
-runWithTiming(scanCsvTiming, replacedCsv);
-runWithTiming(scanCsvReplaceTiming, replacedCsv);
-console.log();
-
 
 // speed comparisions against DB structure instead of strings
-console.log('Converting to dataset...');
-const originalDataSet = convertCsvToDataSet(csv);
-const replacedDataSet = convertCsvToDataSet(replacedCsv);
+// console.log('Converting to dataset...');
+// const originalDataSet = convertCsvToDataSet(csv);
+// const replacedDataSet = convertCsvToDataSet(replacedCsv);
 // console.log('Original dataset:', originalDataSet);
 // console.log('Replaced dataset:', replacedDataSet);
+
+// const outputFilePath = path.join(__dirname, 'tests/output.csv');
+// fs.writeFileSync(outputFilePath, replacedCsv, 'utf8');
+// console.log('Replaced CSV saved to:', outputFilePath);
+
 
 
 /* 

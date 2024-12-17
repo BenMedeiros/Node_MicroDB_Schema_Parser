@@ -1,0 +1,46 @@
+****_628MB.csv
+Length of CSV: 10000000
+
+scanCsvTiming: 0s 25.5745ms
+i: 0
+i: 1
+i: 2
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+i: 8
+i: 9
+scanCsvReplaceTiming: 6s 598.001ms
+
+Encoding Char Set: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+Rows: 399229
+Total key length: 2701221
+Chars Needed: 2.9139142172175627
+
+Total count of keys: 100066
+replaceCsvWithTokenMap: 0s 145.0719ms
+Length of replaced CSV: 1274586
+
+scanCsvTiming: 0s 2.1066ms
+i: 0
+i: 1
+scanCsvReplaceTiming: 0s 829.2602ms
+
+Encoding Char Set:
+
+
+␦123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ
+Rows: 399229
+Total key length: 2701221
+Chars Needed: 2.0763240423853757
+
+Total count of keys: 100066
+replaceCsvWithTokenMap: 0s 148.3425ms
+Length of replaced CSV: 1055682
+
+scanCsvTiming: 0s 1.2747ms
+i: 0
+i: 1
+scanCsvReplaceTiming: 0s 611.7897ms
