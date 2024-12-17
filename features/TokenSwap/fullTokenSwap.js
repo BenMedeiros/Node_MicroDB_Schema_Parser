@@ -18,6 +18,7 @@ function fullCsvTokenSwap(csvString) {
     const rows = csvString.split('\r\n');
     const result = rows.map(row => row.split(','));
     // console.log(result);
+    console.log('Rows:', result.length);
 
     const tokenMap = new Map();
     result.forEach(row => {
@@ -68,6 +69,11 @@ function scanCsvReplaceTiming(csvString) {
     const csvStringCopy = csvString.slice();
     const start = process.hrtime();
     for (let i = 0; i < csvStringCopy.length; i++) {
+        // wanted some status updates for large files
+        if(i % 1000000 === 0) {
+            console.log('i:', i / 1000000);
+        }
+
         csvStringCopy[i] = csvStringCopy[i];
     }
     const end = process.hrtime(start);
