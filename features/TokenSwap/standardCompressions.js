@@ -20,34 +20,31 @@ function readFolderAndTestCompression(dataFolder) {
             const stats = fs.statSync(filePath);
 
             try {
-                let startTime = process.hrtime();
-
                 const data = fs.readFileSync(filePath);
                 const fileCompressionInfo = {};
                 compressionInfo.push(fileCompressionInfo);
                 fileCompressionInfo.file = file;
                 fileCompressionInfo.size = data.length;
-                fileCompressionInfo.time = process.hrtime(startTime)[0] * 1000 + process.hrtime(startTime)[1] / 1000000 // convert to milliseconds
 
-                startTime = process.hrtime();
+                let startTime = process.hrtime();
                 const gzipData = zlib.gzipSync(data);
                 fileCompressionInfo.gzip = {
                     size: gzipData.length,
-                    time: process.hrtime(startTime)[0] * 1000 + process.hrtime(startTime)[1] / 1000000 // convert to milliseconds
+                    time: process.hrtime(startTime)[0] * 1000 + process.hrtime(startTime)[1] / 1000000
                 };
 
                 startTime = process.hrtime();
                 const deflateData = zlib.deflateSync(data);
                 fileCompressionInfo.deflate = {
                     size: deflateData.length,
-                    time: process.hrtime(startTime)[0] * 1000 + process.hrtime(startTime)[1] / 1000000 // convert to milliseconds
+                    time: process.hrtime(startTime)[0] * 1000 + process.hrtime(startTime)[1] / 1000000
                 };
 
                 startTime = process.hrtime();
                 const brotliData = zlib.brotliCompressSync(data);
                 fileCompressionInfo.brotli = {
                     size: brotliData.length,
-                    time: process.hrtime(startTime)[0] * 1000 + process.hrtime(startTime)[1] / 1000000 // convert to milliseconds
+                    time: process.hrtime(startTime)[0] * 1000 + process.hrtime(startTime)[1] / 1000000
                 };
 
             } catch (err) {
@@ -55,7 +52,6 @@ function readFolderAndTestCompression(dataFolder) {
             }
         }
 
-        // console.dir(compressionInfo, { depth: null });
     } catch (err) {
         console.error('Unable to read directory:', err);
     }
@@ -95,12 +91,11 @@ function bulkTesting(dataFolder, testIterations) {
         console.log('i:', i);
         const compressionInfo = readFolderAndTestCompression(dataFolder);
         allComprssionTests.push(compressionInfo);
-        // console.dir(compressionInfo, { depth: null });
     }
 
     const testResults = [];
     for (const compressionInfo of allComprssionTests) {
-        for (i = 0; i < compressionInfo.length; i++) {
+        for (let i = 0; i < compressionInfo.length; i++) {
             const fileCompressionInfo = compressionInfo[i];
 
             if (!testResults[i]) {
